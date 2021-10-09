@@ -18,9 +18,7 @@ namespace DisplayClose
         {
             InitializeComponent();
             startTime = DateTime.Now;
-            comboBox1.SelectedIndex = 4;
             Start();
-            Console.WriteLine(label1.Height);
             AutoLocation();
         }
 
@@ -147,6 +145,9 @@ namespace DisplayClose
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             Start();
+            ////写用户配置
+            Properties.Settings.Default.isHotkey = checkBox1.Checked;
+            Properties.Settings.Default.Save();
         }
 
         /// <summary>
@@ -173,7 +174,7 @@ namespace DisplayClose
 
                 if (b)
                 {
-                    MessageBox.Show("快捷键解除成功！");
+                    //MessageBox.Show("快捷键解除成功！");
                 }
                 else
                 {
@@ -287,7 +288,7 @@ namespace DisplayClose
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //Debug.WriteLine(comboBox1.SelectedIndex);
+           Debug.WriteLine(comboBox1.SelectedIndex);
             //Console.WriteLine(selectTime[comboBox1.SelectedIndex]);
             if (selectTime[comboBox1.SelectedIndex] == -1)
             {
@@ -297,17 +298,24 @@ namespace DisplayClose
             {
                 checkBox2.Enabled = true;
             }
-
+            ////写用户配置
+            Properties.Settings.Default.selectIndex = comboBox1.SelectedIndex;
+            Properties.Settings.Default.Save();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            //读用户配置
+            comboBox1.SelectedIndex = Properties.Settings.Default.selectIndex;
+            checkBox1.Checked = Properties.Settings.Default.isHotkey;
+            checkBox2.Checked = Properties.Settings.Default.isAccident;
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-
+            ////写用户配置
+            Properties.Settings.Default.isAccident = checkBox2.Checked;
+            Properties.Settings.Default.Save();
         }
 
         private void notifyIcon1_Click(object sender, EventArgs e)
