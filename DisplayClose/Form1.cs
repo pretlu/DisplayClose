@@ -20,6 +20,19 @@ namespace DisplayClose
             startTime = DateTime.Now;
             comboBox1.SelectedIndex = 4;
             Start();
+            Console.WriteLine(label1.Height);
+            AutoLocation();
+        }
+
+        /// <summary>
+        /// 自动调整位置
+        /// 避免UI缩放导致显示不全
+        /// </summary>
+        private void AutoLocation()
+        {
+            // throw new NotImplementedException();
+         //   label2.Top = label1.Height+ label1.Height/2;
+ 
         }
 
         //定义一个热键的名字
@@ -214,7 +227,7 @@ namespace DisplayClose
                 }
                 else
                 {
-                    Debug.WriteLine("意外a activa：" + noActiva + " flagyiwai:" + flagYiwai);
+                    //Debug.WriteLine("意外a activa：" + noActiva + " flagyiwai:" + flagYiwai);
  
                     if (noActiva == 0)//用户在活动
                     {
@@ -232,7 +245,7 @@ namespace DisplayClose
                     }
                     else
                     {
-                        Debug.WriteLine("意外b activa：" + noActiva + " flagyiwai:" + flagYiwai + " lastTime:" + lastTime);
+                        //Debug.WriteLine("意外b activa：" + noActiva + " flagyiwai:" + flagYiwai + " lastTime:" + lastTime);
                         //1是否为意外唤醒验证
                         if (flagYiwai != 0 && noActiva > lastTime)
                         {
@@ -261,7 +274,7 @@ namespace DisplayClose
                 }
                 lastTime = noActiva;
                 lastStapClose = false;
-                Console.WriteLine(DateTime.Now+"----"+elapsed);
+                //Console.WriteLine(DateTime.Now+"----"+elapsed);
                 label2.Text = "主动关屏: " + countManual + "  意外唤醒: " + countYiwai + "  自动关屏: " + countAuto + "  关屏倒计时: " + elapsed;
 
             }
@@ -274,8 +287,8 @@ namespace DisplayClose
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Debug.WriteLine(comboBox1.SelectedIndex);
-            Console.WriteLine(selectTime[comboBox1.SelectedIndex]);
+            //Debug.WriteLine(comboBox1.SelectedIndex);
+            //Console.WriteLine(selectTime[comboBox1.SelectedIndex]);
             if (selectTime[comboBox1.SelectedIndex] == -1)
             {
                 checkBox2.Enabled = false;

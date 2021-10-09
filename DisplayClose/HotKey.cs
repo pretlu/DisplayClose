@@ -19,7 +19,7 @@ namespace DisplayClose
         //如果函数执行失败，返回值为0。要得到扩展错误信息，调用GetLastError。
 
         [DllImport("user32.dll", SetLastError = true)]
-
+        
         public static extern bool RegisterHotKey(
 
             IntPtr hWnd,                 //要定义热键的窗口的句柄
