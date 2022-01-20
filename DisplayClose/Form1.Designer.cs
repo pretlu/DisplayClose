@@ -102,7 +102,7 @@ namespace DisplayClose
             "3小时",
             "5小时",
             "禁用"});
-            this.comboBox1.Location = new System.Drawing.Point(14, 64);
+            this.comboBox1.Location = new System.Drawing.Point(14, 61);
             this.comboBox1.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(200, 32);
@@ -265,7 +265,7 @@ namespace DisplayClose
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "只关显示器";
+            this.Text = "只关显示器 1.0 by L";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.contextMenuStrip1.ResumeLayout(false);

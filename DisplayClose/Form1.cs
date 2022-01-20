@@ -341,6 +341,7 @@ namespace DisplayClose
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
+            
             if (e.Button == MouseButtons.Left)
             {
                 //鼠标左键时发生
