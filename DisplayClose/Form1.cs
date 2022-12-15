@@ -21,7 +21,16 @@ namespace DisplayClose
             Start();
             AutoLocation();
         }
-
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            //读用户配置
+            comboBox1.SelectedIndex = Properties.Settings.Default.selectIndex;
+            checkBox1.Checked = Properties.Settings.Default.isHotkey;
+            checkBox2.Checked = Properties.Settings.Default.isAccident;
+            comboBox2.SelectedIndex = Properties.Settings.Default.selectIndexS;
+            if (selectTimeS[comboBox2.SelectedIndex] > 0)
+                timer3.Interval = selectTimeS[comboBox2.SelectedIndex] * 60 * 1000;
+        }
         /// <summary>
         /// 自动调整位置
         /// 避免UI缩放导致显示不全
@@ -29,8 +38,8 @@ namespace DisplayClose
         private void AutoLocation()
         {
             // throw new NotImplementedException();
-         //   label2.Top = label1.Height+ label1.Height/2;
- 
+            //   label2.Top = label1.Height+ label1.Height/2;
+
         }
 
         //定义一个热键的名字
@@ -83,7 +92,6 @@ namespace DisplayClose
             SendMessage(this.Handle, WM_SYSCOMMAND, SC_MONITORPOWER, 2);    // 2 为关闭显示器， －1则打开显示器
             lastCloseTime = DateTime.Now;
             isClose = true;
-            lastStapClose = true;
             Console.WriteLine("已关闭屏幕");
 
 
@@ -185,16 +193,14 @@ namespace DisplayClose
 
         //存放选择项对应的时间
         long[] selectTime = { 1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 120, 180, 300, -1 };
+        int[] selectTimeS = { 1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 120, 180, 300, -1 };
         TimeSpan runTime;//总运行时间
 
         bool isClose = false;//是否关闭了屏幕
 
         private long lastTime;
-        private bool lastStapClose;//记录上一步是否是关闭屏幕
         private int countAuto = 0;
         private int countManual = 0;
-        private int flagYiwai = 0;
-        private int countYiwai = 0;
 
         /// <summary>
         /// 时间统计
@@ -203,98 +209,19 @@ namespace DisplayClose
         /// <param name="e"></param>
         private void timer2_Tick(object sender, EventArgs e)
         {
-            //计算本程序总运行时间
-            //Console.WriteLine(startTime);
-            runTime = DateTime.Now - startTime;
-
-            //计算剩余的关屏时间
-            //Console.WriteLine(runTime);
-            if (selectTime[comboBox1.SelectedIndex] != -1)
-            {
-                long noActiva = ActiveUser.GetLastInputTime();
-
-                long elapsed = selectTime[comboBox1.SelectedIndex] * 60 - noActiva;
-
-                if (elapsed <= 0)//已达到倒计时
-                {
-                    //当屏没关时才关
-                    if (!isClose)
-                    {
-                        //自动关闭屏幕                    
-                        countAuto++;
-                        CloseLCD();
-                    }
-
-                }
-                else
-                {
-                    //Debug.WriteLine("意外a activa：" + noActiva + " flagyiwai:" + flagYiwai);
- 
-                    if (noActiva == 0)//用户在活动
-                    {
-                        //唤醒了显示器
-                        if (isClose && !lastStapClose)
-                        {
-                            Debug.WriteLine("估计被唤醒了");
-                            isClose = false;
-                            flagYiwai = 1;
-                        }
-                        else
-                        {
-                            flagYiwai = 0;
-                        }   
-                    }
-                    else
-                    {
-                        //Debug.WriteLine("意外b activa：" + noActiva + " flagyiwai:" + flagYiwai + " lastTime:" + lastTime);
-                        //1是否为意外唤醒验证
-                        if (flagYiwai != 0 && noActiva > lastTime)
-                        {
-                            flagYiwai++;
-
-                            //2满足意外唤醒条件:10秒后无操作
-                            if (flagYiwai > 10)
-                            {
-                                flagYiwai = 0;
-                                countYiwai++;
-                                if (checkBox1.Checked)
-                                {
-                                    //自动关闭屏幕                    
-                                    countAuto++;
-                                    CloseLCD();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            flagYiwai = 0;
-                        }
-
-
-                    }
-                }
-                lastTime = noActiva;
-                lastStapClose = false;
-                //Console.WriteLine(DateTime.Now+"----"+elapsed);
-                label2.Text = "主动关屏: " + countManual + "  意外唤醒: " + countYiwai + "  自动关屏: " + countAuto + "  关屏倒计时: " + elapsed;
-
-            }
-            else
-            {
-                label2.Text = "主动关屏: " + countManual + "  意外唤醒: " + countYiwai;
-            }
-            label3.Text = "已运行: " + runTime + "  上次关屏: " + lastCloseTime;
+            Run();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-           Debug.WriteLine(comboBox1.SelectedIndex);
+            Debug.WriteLine(comboBox1.SelectedIndex);
             //Console.WriteLine(selectTime[comboBox1.SelectedIndex]);
             if (selectTime[comboBox1.SelectedIndex] == -1)
             {
                 checkBox2.Enabled = false;
 
-            }else
+            }
+            else
             {
                 checkBox2.Enabled = true;
             }
@@ -302,17 +229,103 @@ namespace DisplayClose
             Properties.Settings.Default.selectIndex = comboBox1.SelectedIndex;
             Properties.Settings.Default.Save();
         }
+        long ontimeCloseLast = 0;
+        long ontimeSleepLast = 0;
+        bool first = false;
+        bool isSleep = false;
+        bool isAccident = false;//上次意外关屏，此次就不主动了。
+        int countAcd = 0;
 
-        private void Form1_Load(object sender, EventArgs e)
+        /// <summary>
+        /// 主业务
+        /// </summary>
+        private void Run()
         {
-            //读用户配置
-            comboBox1.SelectedIndex = Properties.Settings.Default.selectIndex;
-            checkBox1.Checked = Properties.Settings.Default.isHotkey;
-            checkBox2.Checked = Properties.Settings.Default.isAccident;
-        }
+            //定义变量
+            long activeLatest = ActiveUser.GetLastInputTime();//距上次活动间隔时间，秒
+            long timeClose = selectTime[comboBox1.SelectedIndex] * 60;
+            long timeSleep = selectTimeS[comboBox2.SelectedIndex] * 60;
+            long ontimeClose = timeClose - activeLatest;
+            long ontimeSleep = timeSleep - activeLatest;
+            if (ontimeClose <= 0 && ontimeCloseLast > 0)//刚到关屏时间
+            {
+                Debug.WriteLine(DateTime.Now + "刚到设定时间，准备关屏");
+                if (isAccident)
+                {
+                    Debug.WriteLine(DateTime.Now + "注：意外唤醒，不关屏");
+                }
+                else
+                {
+                    Debug.WriteLine(DateTime.Now + "开始关屏");
+                    CloseLCD();
+                }
+            }
+            else if (ontimeClose >= 0 && ontimeCloseLast < 0)
+            {//刚到开屏时间
+                Debug.WriteLine(DateTime.Now + "刚刚开始活动");
+                first = true;
+            }
+            else
+            {
+                if (first)//检查是否为意外唤醒
+                {
+                    if (activeLatest == 0)
+                    {
+                        first = false;
+                        Debug.WriteLine(DateTime.Now + "不是意外唤醒");
+                        isAccident = false;
+                        isSleep = false;
 
+                    }
+                    else if (Properties.Settings.Default.isAccident && activeLatest > 20)
+                    {
+                        first = false;
+                        Debug.WriteLine(DateTime.Now + "是意外唤醒，20秒内无操作。");
+                        countAcd++;
+
+                        if (Properties.Settings.Default.isAccident)
+                        {
+                            isAccident = true;
+                            if (isSleep)
+                            {
+                                Debug.WriteLine(DateTime.Now + "睡眠");
+                                CloseSleep();
+                            }
+                            else
+                            {
+                                Debug.WriteLine(DateTime.Now + "关屏");
+                                CloseLCD();
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (ontimeSleep <= 0 && ontimeSleepLast > 0)
+            {
+                Debug.WriteLine(DateTime.Now + "刚到设定时间，准备睡眠");
+
+                if (isAccident && isSleep)
+                {
+                    Debug.WriteLine(DateTime.Now + "注：意外唤醒，不睡");
+                }
+                else
+                {
+                    Debug.WriteLine(DateTime.Now + "开始睡眠");
+                    CloseSleep();
+                }
+                isSleep = true;
+            }
+            ontimeCloseLast = ontimeClose;
+            ontimeSleepLast = ontimeSleep;
+            TimeSpan runTime = DateTime.Now - startTime;
+            label3.Text = "已运行: " + runTime + "  上次关屏: " + lastCloseTime;
+            label2.Text = "  意外唤醒: " + countAcd + "  手动/自动关屏: " + countManual + "/" + countAuto + "  关屏倒计时: " + ontimeClose;
+
+        }
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
+
             ////写用户配置
             Properties.Settings.Default.isAccident = checkBox2.Checked;
             Properties.Settings.Default.Save();
@@ -341,7 +354,7 @@ namespace DisplayClose
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
-            
+
             if (e.Button == MouseButtons.Left)
             {
                 //鼠标左键时发生
@@ -359,5 +372,39 @@ namespace DisplayClose
         {
 
         }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (selectTimeS[comboBox2.SelectedIndex] > 0)
+                timer3.Interval = selectTimeS[comboBox2.SelectedIndex] * 60 * 1000;
+            Debug.WriteLine(timer3.Interval);
+            ////写用户配置
+            Properties.Settings.Default.selectIndexS = comboBox2.SelectedIndex;
+            Properties.Settings.Default.Save();
+
+        }
+
+        //实现睡眠，代码如下：
+        [DllImport("PowrProf.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        public static extern bool SetSuspendState(bool hiberate, bool forceCritical, bool disableWakeEvent);
+
+        /// <summary>
+        /// 系统睡眠
+        /// </summary>
+        private void CloseSleep()
+        {
+            SetSuspendState(false, true, true);//睡眠
+        }
+        //SetSuspendState(false, true, true);
+        /// <summary>
+        /// 定时延时后自动睡眠
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            SetSuspendState(false, true, true);//睡眠
+        }
+
     }
 }

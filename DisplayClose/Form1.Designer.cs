@@ -46,7 +46,10 @@ namespace DisplayClose
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -76,7 +79,7 @@ namespace DisplayClose
             this.checkBox1.Location = new System.Drawing.Point(222, 18);
             this.checkBox1.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(227, 28);
+            this.checkBox1.Size = new System.Drawing.Size(226, 28);
             this.checkBox1.TabIndex = 1;
             this.checkBox1.Text = "启动热键CTRL+WIN+Z";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -102,7 +105,7 @@ namespace DisplayClose
             "3小时",
             "5小时",
             "禁用"});
-            this.comboBox1.Location = new System.Drawing.Point(14, 61);
+            this.comboBox1.Location = new System.Drawing.Point(14, 64);
             this.comboBox1.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(200, 32);
@@ -116,9 +119,9 @@ namespace DisplayClose
             this.label1.Location = new System.Drawing.Point(222, 65);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(227, 24);
+            this.label1.Size = new System.Drawing.Size(226, 24);
             this.label1.TabIndex = 3;
-            this.label1.Text = "无操作时自动关闭显示器";
+            this.label1.Text = "不活动后自动关屏";
             // 
             // timer1
             // 
@@ -188,11 +191,11 @@ namespace DisplayClose
             this.checkBox2.AutoSize = true;
             this.checkBox2.Checked = true;
             this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox2.Location = new System.Drawing.Point(13, 108);
+            this.checkBox2.Location = new System.Drawing.Point(455, 18);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(202, 28);
+            this.checkBox2.Size = new System.Drawing.Size(124, 28);
             this.checkBox2.TabIndex = 6;
-            this.checkBox2.Text = "防止意外唤醒显示器";
+            this.checkBox2.Text = "防止意外唤醒";
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
@@ -218,14 +221,17 @@ namespace DisplayClose
             // 
             this.tableLayoutPanel2.AutoSize = true;
             this.tableLayoutPanel2.BackColor = System.Drawing.SystemColors.Control;
-            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnCount = 3;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 47.16981F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 52.83019F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 129F));
             this.tableLayoutPanel2.Controls.Add(this.comboBox1, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.button1, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.checkBox2, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.checkBox1, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.label1, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.checkBox1, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.checkBox2, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.label4, 1, 2);
+            this.tableLayoutPanel2.Controls.Add(this.comboBox2, 0, 2);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 97);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.Padding = new System.Windows.Forms.Padding(10);
@@ -233,8 +239,46 @@ namespace DisplayClose
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(463, 155);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(592, 155);
             this.tableLayoutPanel2.TabIndex = 8;
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(222, 110);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(226, 24);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "不活动后自动睡眠";
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "1分钟",
+            "2分钟",
+            "3分钟",
+            "5分钟",
+            "10分钟",
+            "15分钟",
+            "20分钟",
+            "30分钟",
+            "45分钟",
+            "1小时",
+            "2小时",
+            "3小时",
+            "5小时",
+            "禁用"});
+            this.comboBox2.Location = new System.Drawing.Point(14, 109);
+            this.comboBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(200, 32);
+            this.comboBox2.TabIndex = 7;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // tableLayoutPanel3
             // 
@@ -249,15 +293,20 @@ namespace DisplayClose
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 37F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 63F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(531, 256);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(598, 256);
             this.tableLayoutPanel3.TabIndex = 9;
+            // 
+            // timer3
+            // 
+            this.timer3.Interval = 3000;
+            this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(532, 229);
+            this.ClientSize = new System.Drawing.Size(600, 262);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -265,7 +314,7 @@ namespace DisplayClose
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "只关显示器 1.0 by L";
+            this.Text = "只关显示器 2.0 by L";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.contextMenuStrip1.ResumeLayout(false);
@@ -298,6 +347,9 @@ namespace DisplayClose
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.Timer timer3;
     }
 }
 
