@@ -70,5 +70,29 @@ namespace DisplayClose.Properties {
                 this["selectIndexS"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:00")]
+        public global::System.TimeSpan closeTotal {
+            get {
+                return ((global::System.TimeSpan)(this["closeTotal"]));
+            }
+            set {
+                this["closeTotal"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:00")]
+        public global::System.TimeSpan sleepTotal {
+            get {
+                return ((global::System.TimeSpan)(this["sleepTotal"]));
+            }
+            set {
+                this["sleepTotal"] = value;
+            }
+        }
     }
 }

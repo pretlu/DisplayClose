@@ -14,7 +14,7 @@ namespace DisplayClose {
     public partial class Form1 : Form {
         public Form1() {
             InitializeComponent();
-            startTime = DateTime.Now;
+         //   startTime = DateTime.Now;
             Start();
             AutoLocation();
         }
@@ -24,6 +24,10 @@ namespace DisplayClose {
             checkBox1.Checked = Properties.Settings.Default.isHotkey;
             checkBox2.Checked = Properties.Settings.Default.isAccident;
             comboBox2.SelectedIndex = Properties.Settings.Default.selectIndexS;
+
+            sleepTimeTotal = Properties.Settings.Default.sleepTotal;
+            closeTimeTotal = Properties.Settings.Default.closeTotal;
+
         }
         /// <summary>
         /// 自动调整位置
@@ -37,8 +41,7 @@ namespace DisplayClose {
 
         //定义一个热键的名字
         const int ONEKEY = 1;
-        readonly DateTime startTime;
-        DateTime lastCloseTime;
+
 
 
         ///
@@ -178,7 +181,6 @@ namespace DisplayClose {
         //存放选择项对应的时间
         long[] selectTime = { 1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 120, 180, 300, -1 };
         int[] selectTimeS = { 1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 120, 180, 300, -1 };
-        TimeSpan runTime;//总运行时间
         private int countAuto = 0;
         private int countManual = 0;
 
@@ -189,6 +191,16 @@ namespace DisplayClose {
         bool isCloseSleep = false;
         bool isCloseSleepLast = false;
         int countAcd = 0;
+
+        readonly static DateTime startTime= DateTime.Now;
+        DateTime closeTimeStar;
+        TimeSpan closeTimeLast;
+        TimeSpan closeTimeTotal;
+        DateTime sleepTimeStar ;
+        TimeSpan sleepTimeLast;
+        TimeSpan sleepTimeTotal;
+
+
 
         /// <summary>
         /// 主业务
@@ -209,10 +221,35 @@ namespace DisplayClose {
                 }
             } else if (ontimeClose >= 0 && ontimeCloseLast < 0) {//刚到开屏时间
                 Debug.WriteLine(DateTime.Now + "显示器已被唤醒");
+                //统计时长
+                Debug.WriteLine(DateTime.Now + "初始值" + sleepTimeStar);
+                if (isCloseLED && !isCloseSleep) {//统计关屏时长
+                    closeTimeLast = DateTime.Now - closeTimeStar;
+                    closeTimeTotal += closeTimeLast;
+                    Debug.WriteLine(DateTime.Now + "关屏用时" + closeTimeLast + "总时：" + closeTimeTotal);
+                    //保存数据
+                    Properties.Settings.Default.closeTotal= closeTimeTotal;
+                    Properties.Settings.Default.Save();
+                }
+                if (isCloseSleep) {
+                    sleepTimeLast = DateTime.Now - sleepTimeStar;
+                    sleepTimeTotal += sleepTimeLast;
+                    Debug.WriteLine(DateTime.Now + "睡眠用时" + sleepTimeLast + "总时：" + sleepTimeTotal);
+
+                    //保存数据
+                    Properties.Settings.Default.sleepTotal = sleepTimeTotal;
+                    Properties.Settings.Default.Save();
+                }
+
+
+                //数据重置
                 checkAcd = true;
                 isCloseLED = false;
                 isCloseSleepLast = isCloseSleep;
                 isCloseSleep = false;
+
+
+
             } else {
                 if (checkAcd)//检查是否为意外唤醒
                 {
@@ -238,14 +275,24 @@ namespace DisplayClose {
             if (ontimeSleep <= 0 && ontimeSleepLast > 0) {
                 Debug.WriteLine(DateTime.Now + "刚到设定时间，准备睡眠");
                 if (!isCloseSleep) {
+                    if (isCloseLED) {//统计关屏时长
+                        closeTimeLast = DateTime.Now - closeTimeStar;
+                        closeTimeTotal += closeTimeLast;
+                        Debug.WriteLine(DateTime.Now + "关屏用时" + closeTimeLast+"总时："+closeTimeTotal);
+                        //保存数据
+                        Properties.Settings.Default.closeTotal = closeTimeTotal;
+                        Properties.Settings.Default.Save();
+                    }
                     CloseSleep();
                 }
             }
             ontimeCloseLast = ontimeClose;
             ontimeSleepLast = ontimeSleep;
             TimeSpan runTime = DateTime.Now - startTime;
-            label3.Text = "已运行: " + runTime + "  上次关屏: " + lastCloseTime;
-            label2.Text = "  意外唤醒: " + countAcd + "  手动/自动关屏: " + countManual + "/" + countAuto + "  关屏倒计时: " + ontimeClose;
+            label3.Text = "本次运行: " + runTime.ToString(@"d\天hh\:mm\.ss") + "  上次关屏: " + closeTimeStar;
+            label2.Text = "意外唤醒：" + countAcd + "  手动/自动关屏: " + countManual + "/" + countAuto + "  关屏倒计时: " + ontimeClose;
+            label5.Text = "本次关屏时长: " + closeTimeLast.ToString(@"d\天hh\:mm\.ss") + " 总时长:" + closeTimeTotal.ToString(@"d\天hh\:mm\.ss");
+            label6.Text = "本次睡眠时长: " + sleepTimeLast.ToString(@"d\天hh\:mm\.ss") + " 总时长:" + sleepTimeTotal.ToString(@"d\天hh\:mm\.ss");
 
         }
         private void checkBox2_CheckedChanged(object sender, EventArgs e) {
@@ -305,8 +352,9 @@ namespace DisplayClose {
         /// </summary>
         private void CloseSleep() {
             isCloseSleep = true;
-           SetSuspendState(false, true, true);//睡眠
-            Debug.WriteLine(DateTime.Now + "开始睡眠");
+            sleepTimeStar= DateTime.Now;
+            SetSuspendState(false, true, true);//睡眠
+            Debug.WriteLine(DateTime.Now + "已睡眠");
 
         }
 
@@ -316,8 +364,8 @@ namespace DisplayClose {
         private void CloseLCD() {
             isCloseLED = true;
            SendMessage(this.Handle, WM_SYSCOMMAND, SC_MONITORPOWER, 2);    // 2 为关闭显示器， －1则打开显示器
-            lastCloseTime = DateTime.Now;
-            Debug.WriteLine(DateTime.Now + "开始关屏");
+            closeTimeStar = DateTime.Now;
+            Debug.WriteLine(DateTime.Now + "已关屏");
         }
 
     }
