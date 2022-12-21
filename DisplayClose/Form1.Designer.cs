@@ -80,7 +80,7 @@ namespace DisplayClose
             this.checkBox1.Location = new System.Drawing.Point(217, 16);
             this.checkBox1.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(220, 28);
+            this.checkBox1.Size = new System.Drawing.Size(219, 28);
             this.checkBox1.TabIndex = 1;
             this.checkBox1.Text = "启动热键CTRL+WIN+Z";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -106,7 +106,7 @@ namespace DisplayClose
             "3小时",
             "5小时",
             "禁用"});
-            this.comboBox1.Location = new System.Drawing.Point(14, 54);
+            this.comboBox1.Location = new System.Drawing.Point(14, 57);
             this.comboBox1.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(195, 32);
@@ -120,7 +120,7 @@ namespace DisplayClose
             this.label1.Location = new System.Drawing.Point(217, 58);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(220, 24);
+            this.label1.Size = new System.Drawing.Size(219, 24);
             this.label1.TabIndex = 3;
             this.label1.Text = "不活动后自动关屏";
             // 
@@ -192,9 +192,9 @@ namespace DisplayClose
             this.checkBox2.AutoSize = true;
             this.checkBox2.Checked = true;
             this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox2.Location = new System.Drawing.Point(444, 16);
+            this.checkBox2.Location = new System.Drawing.Point(443, 16);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(167, 28);
+            this.checkBox2.Size = new System.Drawing.Size(168, 28);
             this.checkBox2.TabIndex = 6;
             this.checkBox2.Text = "防止意外唤醒";
             this.checkBox2.UseVisualStyleBackColor = true;
@@ -253,7 +253,7 @@ namespace DisplayClose
             this.tableLayoutPanel2.ColumnCount = 3;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 47.16981F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 52.83019F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 172F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 173F));
             this.tableLayoutPanel2.Controls.Add(this.comboBox1, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.button1, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.label1, 1, 1);
@@ -278,7 +278,7 @@ namespace DisplayClose
             this.label4.Location = new System.Drawing.Point(217, 99);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(220, 24);
+            this.label4.Size = new System.Drawing.Size(219, 24);
             this.label4.TabIndex = 8;
             this.label4.Text = "不活动后自动睡眠";
             // 
@@ -302,7 +302,7 @@ namespace DisplayClose
             "3小时",
             "5小时",
             "禁用"});
-            this.comboBox2.Location = new System.Drawing.Point(14, 95);
+            this.comboBox2.Location = new System.Drawing.Point(14, 98);
             this.comboBox2.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(195, 32);

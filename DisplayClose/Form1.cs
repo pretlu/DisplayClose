@@ -289,7 +289,7 @@ namespace DisplayClose {
             ontimeCloseLast = ontimeClose;
             ontimeSleepLast = ontimeSleep;
             TimeSpan runTime = DateTime.Now - startTime;
-            label3.Text = "本次运行: " + runTime.ToString(@"d\天hh\:mm\.ss") + "  上次关屏: " + closeTimeStar;
+            label3.Text = "运行: " + runTime.ToString(@"d\天hh\:mm\.ss") + "  关屏: " + closeTimeStar;
             label2.Text = "意外唤醒：" + countAcd + "  手动/自动关屏: " + countManual + "/" + countAuto + "  关屏倒计时: " + ontimeClose;
             label5.Text = "本次关屏时长: " + closeTimeLast.ToString(@"d\天hh\:mm\.ss") + " 总时长:" + closeTimeTotal.ToString(@"d\天hh\:mm\.ss");
             label6.Text = "本次睡眠时长: " + sleepTimeLast.ToString(@"d\天hh\:mm\.ss") + " 总时长:" + sleepTimeTotal.ToString(@"d\天hh\:mm\.ss");
